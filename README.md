@@ -1,2 +1,2 @@
-# cocosCreator4Pomelo
+# CocosCreator4Pomelo
 cocos client for pomelo
