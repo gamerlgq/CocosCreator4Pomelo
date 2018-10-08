@@ -1,0 +1,8 @@
+.vscode/
+build/
+creator.d.ts
+local/
+library/
+temp/
+template-banner.png
+template.json
