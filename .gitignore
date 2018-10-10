@@ -6,3 +6,4 @@ library/
 temp/
 template-banner.png
 template.json
+.DS_Store
