@@ -846,14 +846,14 @@
       switch(proto.option){
         case 'required' :
           if(typeof(msg[name]) === 'undefined'){
-            console.warn('no property exist for required! name: %j, proto: %j, msg: %j', name, proto, msg);
+            cc.warn('no property exist for required! name: %j, proto: %j, msg: %j', name, proto, msg);
             return false;
           }
         case 'optional' :
           if(typeof(msg[name]) !== 'undefined'){
             var message = protos.__messages[proto.type] || MsgEncoder.protos['message ' + proto.type];
             if(!!message && !checkMsg(msg[name], message)){
-              console.warn('inner proto error! name: %j, proto: %j, msg: %j', name, proto, msg);
+              cc.warn('inner proto error! name: %j, proto: %j, msg: %j', name, proto, msg);
               return false;
             }
           }
@@ -1144,7 +1144,7 @@
 
 })('undefined' !== typeof protobuf ? protobuf : module.exports, this);
 
-(function() {
+cc.Pomelo = function() {
   var JS_WS_CLIENT_TYPE = 'js-websocket';
   var JS_WS_CLIENT_VERSION = '0.0.1';
 
@@ -1156,7 +1156,7 @@
   var Package = Protocol.Package;
   var Message = Protocol.Message;
   var EventEmitter = window.EventEmitter;
-  var rsa = window.rsa;
+  var rsa = window.RSAKey;
   var disconnectCb = null;
 
   if(typeof(window) != "undefined" && typeof(sys) != 'undefined' && sys.localStorage) {
@@ -1177,7 +1177,7 @@
 
   var root = window;
   var pomelo = Object.create(EventEmitter.prototype); // object extend from object
-  root.pomelo = pomelo;
+  // root.pomelo = pomelo;
   var socket = null;
   var reqId = 0;
   var callbacks = {};
@@ -1230,11 +1230,15 @@
     encode = params.encode || defaultEncode;
     decode = params.decode || defaultDecode;
 
-    var url = 'ws://' + host;
+    var isWss = params.wss
+    var url = 'ws://'
+    if (isWss){
+      url = 'wss://'
+    }
+    url = url + host
     if(port) {
       url +=  ':' + port;
     }
-
     handshakeBuffer.user = params.user;
     if(params.encrypt) {
       useCrypto = true;
@@ -1288,7 +1292,7 @@
   };
 
   var connect = function(params, url, cb) {
-    console.log('connect to ' + url);
+    cc.log('connect to ' + url);
 
     var params = params || {};
     var maxReconnectAttempts = params.maxReconnectAttempts || DEFAULT_MAX_RECONNECT_ATTEMPTS;
@@ -1329,12 +1333,12 @@
     };
     var onerror = function(event) {
       pomelo.emit('io-error', event);
-      console.error('socket error: ', event);
+      cc.error('socket error: ', event);
     };
     var onclose = function(event) {
       pomelo.emit('close',event);
       pomelo.emit('disconnect', event);
-      console.error('socket close: ', event);
+      cc.error('socket close: ', event);
       if(!!params.reconnect && reconnectAttempts < maxReconnectAttempts) {
         reconnect = true;
         reconnectAttempts++;
@@ -1360,7 +1364,7 @@
     if(socket) {
       if(socket.disconnect) socket.disconnect();
       if(socket.close) socket.close();
-      console.log('disconnect');
+      cc.log('disconnect');
       socket = null;
     }
 
@@ -1408,7 +1412,7 @@
   var sendMessage = function(reqId, route, msg) {
     if(useCrypto) {
       msg = JSON.stringify(msg);
-      var sig = rsa.signString(msg, "sha256");
+      var sig = rsa.sign(msg, "sha256");
       msg = JSON.parse(msg);
       msg['__crypto__'] = sig;
     }
@@ -1459,7 +1463,7 @@
     if(gap > gapThreshold) {
       heartbeatTimeoutId = setTimeout(heartbeatTimeoutCb, gap);
     } else {
-      console.error('server heartbeat timeout');
+      cc.error('server heartbeat timeout');
       pomelo.emit('heartbeat timeout');
       pomelo.disconnect();
     }
@@ -1614,9 +1618,10 @@
         }
       }
     };
-
+    return pomelo;
     // module.exports = pomelo;
-  })();
+  };
+ window.pomelo=new cc.Pomelo();
 
 
 

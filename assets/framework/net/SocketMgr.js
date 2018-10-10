@@ -85,8 +85,9 @@ let SocketMgr = cc.Class({
             host : this._serverConfig.host,
             port : this._serverConfig.port,
             reconnect : true,
-            log:true
-            // encrypt:true
+            log:true,
+            encrypt:true,
+            wss:true
         }
         // init pomelo client
         this._initPomeloClient(params,() => {
@@ -111,15 +112,16 @@ let SocketMgr = cc.Class({
         this.disconnect(()=>{
             // 均衡负载后返回connector服务器host,port
             let msgData = msgEvent.getMsgData()
-            let h = msgData.host
+            let h = msgData.host === 'localhost' ? this._serverConfig.host : msgData.host
             let p = msgData.port
             // 连接connector服务器
             let params = {
                 host : h,
                 port : p,
                 reconnect : true,
-                log:true
-                // encrypt:true
+                log:true,
+                wss:true,
+                encrypt:true
             }
             this._initPomeloClient(params,()=>{
                 let serverId = LoginProtocol.req.login_connector_req

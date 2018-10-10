@@ -65,7 +65,7 @@ Log.logErrorMsg = error =>{
 Log.netMsgReqLog = msgs =>{
     if (Log._logLevel >= 4) {
         if (typeof(msgs)== "string"){
-            cc.log("[Message Req  Log]=======>:"+"["+msgs+"]")
+            cc.log("[Message Req  Log]===>>> :"+"["+msgs+"]")
         }else if (typeof(msgs)== "array" || typeof(msgs) == "object"){
             let msgStr = "["
             let objs = []
@@ -86,12 +86,7 @@ Log.netMsgReqLog = msgs =>{
                     }
                 }
             }
-            cc.log("[Message Req  Log]=======>:"+msgStr+"]")
-            if (objs.length != 0) {
-                objs.forEach(obj => {
-                    Log.dump(obj,"send msgData")
-                });
-            }
+            cc.warn("[Message Req  Log]===>>> :"+msgStr+"]",objs)
         }
     }
 }
@@ -104,7 +99,7 @@ Log.netMsgReqLog = msgs =>{
 Log.netMsgRespLog = (msgs) => {
     if (Log._logLevel >= 4) {
         if (typeof(msgs)== "string"){
-            cc.log("[Message Resp Log]<=======:"+"["+msgs+"]")
+            cc.log("[Message Resp Log]<<<=== :"+"["+msgs+"]")
         }else if (typeof(msgs)== "array" || typeof(msgs) == "object"){
             let msgStr = "["
             let objs = []
@@ -125,12 +120,7 @@ Log.netMsgRespLog = (msgs) => {
                     }
                 }
             }
-            cc.log("[Message Resp Log]<=======:"+msgStr+"]")
-            if (objs.length != 0) {
-                objs.forEach(obj => {
-                    Log.dump(obj,"receive msgData")
-                });
-            }
+            cc.warn("[Message Resp Log]<<<=== :"+msgStr+"]",objs)
         }
     }
 }
