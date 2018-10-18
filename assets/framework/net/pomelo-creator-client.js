@@ -1156,7 +1156,9 @@ cc.Pomelo = function() {
   var Package = Protocol.Package;
   var Message = Protocol.Message;
   var EventEmitter = window.EventEmitter;
-  var rsa = window.RSAKey;
+  var RSAKey = require("./rsa/rsa");
+  let rsa = new RSAKey.Key()
+  window.rsa = rsa
   var disconnectCb = null;
 
   if(typeof(window) != "undefined" && typeof(sys) != 'undefined' && sys.localStorage) {
