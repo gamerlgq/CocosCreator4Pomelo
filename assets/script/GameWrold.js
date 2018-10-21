@@ -69,10 +69,6 @@ let GameWorld = cc.Class({
         HttpMgr.getInstance().init()
         // 初始化广播
         BroadcastMgr.getInstance().init()
-
-        HttpMgr.getInstance().request({host:"https://www.baidu.com",cb:function (params) {
-            cc.error("1111111",params)
-        }})
     },
 
     /**
